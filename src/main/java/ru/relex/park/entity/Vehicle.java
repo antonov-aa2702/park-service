@@ -14,6 +14,9 @@ import lombok.Setter;
 public class Vehicle {
 
     private Integer id;
+
     private String name;
-    private String year;
+
+    private Integer year;
 }
+
