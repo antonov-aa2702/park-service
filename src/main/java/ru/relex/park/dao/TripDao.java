@@ -1,4 +1,4 @@
-package ru.relex.park.repository;
+package ru.relex.park.dao;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -64,7 +64,7 @@ public class TripDao implements Dao<Integer, Trip> {
         return false;
     }
 
-    public List<Trip> getAllByFilter(TripFilter tripFilter) {
+    public List<Trip> getAllByFilter(TripFilter tripFilter, Integer userId) {
         String sql = """
                 SELECT id, user_id, vehicle_id, distance, from_date, to_date
                 FROM trip
@@ -72,6 +72,7 @@ public class TripDao implements Dao<Integer, Trip> {
                 """;
         var rowMapper = getRowMapper();
         return jdbcTemplate.query(sql, rowMapper,
+                userId,
                 tripFilter.getVehicleId(),
                 tripFilter.getFromDate(),
                 tripFilter.getToDate());

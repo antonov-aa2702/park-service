@@ -1,4 +1,4 @@
-package ru.relex.park.repository;
+package ru.relex.park.dao;
 
 import java.util.List;
 import java.util.Optional;

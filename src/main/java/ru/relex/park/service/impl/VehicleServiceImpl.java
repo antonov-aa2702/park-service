@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.relex.park.dto.VehicleDto;
 import ru.relex.park.mapper.VehicleMapper;
-import ru.relex.park.repository.VehicleDao;
+import ru.relex.park.dao.VehicleDao;
 import ru.relex.park.service.VehicleService;
 
 import java.util.Optional;

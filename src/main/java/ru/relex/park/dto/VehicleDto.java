@@ -8,7 +8,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
 
 @Getter
 @Setter
@@ -20,7 +19,6 @@ public class VehicleDto {
     private Integer id;
 
     @NotNull(message = "Name cannot be null")
-    @Length
     private String name;
 
     @NotNull(message = "Year cannot be null")

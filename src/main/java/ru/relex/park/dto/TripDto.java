@@ -20,9 +20,6 @@ public class TripDto {
 
     private Integer id;
 
-    @NotNull(message = "User id cannot be null")
-    private Integer userId;
-
     @NotNull(message = "Vehicle id cannot be null")
     private Integer vehicleId;
 

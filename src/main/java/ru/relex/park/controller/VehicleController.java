@@ -10,7 +10,7 @@ import ru.relex.park.dto.VehicleDto;
 import ru.relex.park.service.VehicleService;
 
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/vehicle")
+@RequestMapping("/api/v1/vehicles")
 @RestController
 public class VehicleController {
 

@@ -18,6 +18,15 @@ public class GlobalExceptionHandler {
 
     private static final Logger log = Logger.getLogger(GlobalExceptionHandler.class.getName());
 
+    @ExceptionHandler(IllegalStateException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApplicationError handleIllegalState(IllegalStateException exception) {
+        log.severe(exception.getMessage());
+        return ApplicationError.builder()
+                .message(exception.getMessage())
+                .build();
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApplicationError handleInvalidFormatDate(MethodArgumentNotValidException exception) {

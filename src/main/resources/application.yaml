@@ -20,4 +20,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/park_repository
     user: postgres
     password: 123456789
-
+security:
+  jwt:
+    secret: FSDKJKJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJALKJFKLAJFSFHAJHDJFHSJHFJHFJSKHKJDFHSJKDHFJSHFKDJHFSFSDFS
+    lifetime: 1

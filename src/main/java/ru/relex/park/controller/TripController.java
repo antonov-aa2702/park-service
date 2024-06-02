@@ -44,5 +44,4 @@ public class TripController {
     public List<TripDto> getAllTripsByFilter(@Validated @RequestBody TripFilter tripFilter) {
         return tripService.getAllTripsByFilter(tripFilter);
     }
-
 }

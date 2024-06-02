@@ -1,4 +1,4 @@
-package ru.relex.park.repository;
+package ru.relex.park.dao;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
