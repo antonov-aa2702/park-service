@@ -48,7 +48,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(configurer ->
                         configurer.requestMatchers("/api/v1/auth/login",
                                         "/api/v1/auth/registration").permitAll()
-                                .requestMatchers("/api/v1/trips/**").hasRole("DRIVER")
+                                .requestMatchers("/api/v1/trips/filter").hasRole("DRIVER")
                                 .requestMatchers("/api/v1/vehicles/**").hasRole("ADMIN"))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

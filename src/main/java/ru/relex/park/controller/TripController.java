@@ -37,8 +37,8 @@ public class TripController {
      * Возвращает список всех поездок по фильтру. В качестве параметров фильтрации
      * задается объект {@link TripFilter}. Нельзя смотреть информацию о чужих поездках.
      *
-     * @param tripFilter
-     * @return
+     * @param tripFilter информация о поездке
+     * @return список поездок
      */
     @GetMapping("/filter")
     public List<TripDto> getAllTripsByFilter(@Validated @RequestBody TripFilter tripFilter) {

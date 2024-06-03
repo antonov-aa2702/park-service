@@ -12,6 +12,7 @@ import ru.relex.park.entity.Trip;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,11 +25,14 @@ public class TripDao implements Dao<Integer, Trip> {
     @Override
     public Integer save(Trip entity) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-
+        var sql = """
+                   INSERT INTO trip (user_id, vehicle_id, distance, from_date, to_date)
+                   VALUES (?, ?, ?, ?, ?)
+                """;
         jdbcTemplate.update(
                 connection -> {
                     PreparedStatement ps = connection.prepareStatement(
-                            "INSERT INTO trip (user_id, vehicle_id, distance, from_date, to_date) VALUES (?, ?, ?, ?, ?)",
+                            sql,
                             Statement.RETURN_GENERATED_KEYS
                     );
                     ps.setInt(1, entity.getUserId());
@@ -64,11 +68,26 @@ public class TripDao implements Dao<Integer, Trip> {
         return false;
     }
 
+    public List<Trip> findByVehicleIdAndDateBetween(Integer vehicleId, LocalDate fromDate, LocalDate toDate) {
+        String sql = """
+                SELECT id, user_id, vehicle_id, distance, from_date, to_date
+                FROM trip
+                WHERE vehicle_id = ?
+                      AND ? BETWEEN from_date AND to_date
+                      OR ? BETWEEN from_date AND to_date;
+                """;
+        var rowMapper = getRowMapper();
+        return jdbcTemplate.query(sql, rowMapper,
+                vehicleId,
+                fromDate,
+                toDate);
+    }
+
     public List<Trip> getAllByFilter(TripFilter tripFilter, Integer userId) {
         String sql = """
                 SELECT id, user_id, vehicle_id, distance, from_date, to_date
                 FROM trip
-                WHERE user_id = ? AND vehicle_id = ? AND from_date = ? AND to_date = ?;
+                WHERE user_id = ? AND vehicle_id = ? AND ? < from_date AND ? > to_date;
                 """;
         var rowMapper = getRowMapper();
         return jdbcTemplate.query(sql, rowMapper,

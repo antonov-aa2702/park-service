@@ -10,5 +10,4 @@ public interface TripService {
     Integer createTrip(TripDto tripDto);
 
     List<TripDto> getAllTripsByFilter(TripFilter tripFilter);
-
 }

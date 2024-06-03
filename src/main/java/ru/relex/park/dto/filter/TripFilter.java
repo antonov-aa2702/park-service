@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -18,9 +21,11 @@ public class TripFilter {
     private Integer vehicleId;
 
     @NotNull(message = "From date cannot be null")
-    private Integer fromDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd", iso = DateTimeFormat.ISO.DATE)
+    private LocalDate fromDate;
 
     @NotNull(message = "To date cannot be null")
-    private Integer toDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd", iso = DateTimeFormat.ISO.DATE)
+    private LocalDate toDate;
 }
 

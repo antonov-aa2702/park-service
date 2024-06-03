@@ -1,6 +1,8 @@
 package ru.relex.park.handler;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,6 +19,24 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler {
 
     private static final Logger log = Logger.getLogger(GlobalExceptionHandler.class.getName());
+
+    @ExceptionHandler(org.springframework.security.access.AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ApplicationError handleAccessDenied(AccessDeniedException exception) {
+        log.severe(exception.getMessage());
+        return ApplicationError.builder()
+                .message("Доступ запрещён!")
+                .build();
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApplicationError handleFailedAuthentication(AuthenticationException exception) {
+        log.severe(exception.getMessage());
+        return ApplicationError.builder()
+                .message("Аутентификация не удалась! Проверьте логин и пароль!")
+                .build();
+    }
 
     @ExceptionHandler(IllegalStateException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
