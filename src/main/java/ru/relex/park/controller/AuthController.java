@@ -20,11 +20,23 @@ public class AuthController {
 
     private final SecurityService securityService;
 
+    /**
+     * Аутентификация пользователя
+     *
+     * @param jwtRequest данные для аутентификации
+     * @return токен
+     */
     @PostMapping(value = "/login")
     public JwtResponse login(@Validated @RequestBody JwtRequest jwtRequest) {
         return securityService.login(jwtRequest);
     }
 
+    /**
+     * Регистрация пользователя. Только пользователь с ролью "USER" может зарегистрироваться.
+     *
+     * @param userDto данные для регистрации
+     * @return идентификатор регистрируемого пользователя
+     */
     @PostMapping(value = "/registration")
     public Integer registration(@Validated @RequestBody UserDto userDto) {
         return securityService.registration(userDto);

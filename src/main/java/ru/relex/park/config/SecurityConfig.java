@@ -1,5 +1,6 @@
 package ru.relex.park.config;
 
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,13 +17,10 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import ru.relex.park.security.JwtFilter;
 
-/**
- * Класс отвечает за конфигурацию безопасности приложения.
- */
-@Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 @RequiredArgsConstructor
+@Configuration
 public class SecurityConfig {
 
     private final JwtFilter jwtFilter;

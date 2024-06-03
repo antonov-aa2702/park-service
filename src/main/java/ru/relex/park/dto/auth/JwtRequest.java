@@ -17,9 +17,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class JwtRequest {
 
-    @NotNull(message = "Логин не может отсутствовать")
+    @NotNull(message = "login cannot be null")
     private String login;
 
-    @NotNull(message = "Пароль не может отсутствовать")
+    @NotNull(message = "password cannot be null")
     private String password;
 }

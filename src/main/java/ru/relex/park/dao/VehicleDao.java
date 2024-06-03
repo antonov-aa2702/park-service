@@ -5,7 +5,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 import ru.relex.park.entity.Vehicle;
 
 import java.sql.PreparedStatement;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-@Repository
+@Component
 public class VehicleDao implements Dao<Integer, Vehicle> {
 
     private final JdbcTemplate jdbcTemplate;
@@ -53,7 +53,7 @@ public class VehicleDao implements Dao<Integer, Vehicle> {
 
     @Override
     public List<Vehicle> findAll() {
-        return null;
+        return List.of();
     }
 
     @Override

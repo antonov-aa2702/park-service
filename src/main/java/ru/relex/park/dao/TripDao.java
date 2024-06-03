@@ -55,7 +55,7 @@ public class TripDao implements Dao<Integer, Trip> {
 
     @Override
     public List<Trip> findAll() {
-        return null;
+        return List.of();
     }
 
     @Override

@@ -25,10 +25,15 @@ public class UserDao implements Dao<Integer, User> {
     public Integer save(User entity) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
+        var sql = """
+                  INSERT INTO users (name, login, password, role)" +
+                  VALUES (?, ?, ?, ?)
+                  """;
         jdbcTemplate.update(
                 connection -> {
+
                     PreparedStatement ps = connection.prepareStatement(
-                            "INSERT INTO users (name, login, password, role) VALUES (?, ?, ?, ?)",
+                            sql,
                             Statement.RETURN_GENERATED_KEYS
                     );
                     ps.setString(1, entity.getName());
@@ -50,7 +55,7 @@ public class UserDao implements Dao<Integer, User> {
 
     @Override
     public List<User> findAll() {
-        return null;
+        return List.of();
     }
 
     @Override
@@ -61,10 +66,6 @@ public class UserDao implements Dao<Integer, User> {
     @Override
     public boolean delete(Integer id) {
         return false;
-    }
-
-    private Integer getGeneratedValue(KeyHolder keyHolder) {
-        return ((Integer) (keyHolder.getKeyList().get(0).get("id"))).intValue();
     }
 
     public Optional<User> findByLogin(String login) {
@@ -94,5 +95,9 @@ public class UserDao implements Dao<Integer, User> {
                 .password(rs.getString("password"))
                 .role(Role.valueOf(rs.getString("role")))
                 .build();
+    }
+
+    private Integer getGeneratedValue(KeyHolder keyHolder) {
+        return ((Integer) (keyHolder.getKeyList().get(0).get("id"))).intValue();
     }
 }
