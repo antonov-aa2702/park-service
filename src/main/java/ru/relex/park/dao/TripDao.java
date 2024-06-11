@@ -20,19 +20,36 @@ import java.util.Optional;
 @Component
 public class TripDao implements Dao<Integer, Trip> {
 
+    private static final String SAVE_SQL = """
+               INSERT INTO trip (user_id, vehicle_id, distance, from_date, to_date)
+               VALUES (?, ?, ?, ?, ?)
+            """;
+
+    private static final String FIND_BY_VEHICLE_AND_DATE_BETWEEN_SQL = """
+            SELECT id, user_id, vehicle_id, distance, from_date, to_date
+            FROM trip
+            WHERE vehicle_id = ?
+                  AND ? BETWEEN from_date AND to_date
+                  OR ? BETWEEN from_date AND to_date;
+            """;
+
+    private static final String FIND_BY_USER_VEHICLE_AND_DATE_BETWEEN_SQL = """
+            SELECT id, user_id, vehicle_id, distance, from_date, to_date
+            FROM trip
+            WHERE user_id = ? AND vehicle_id = ? AND ? < from_date AND ? > to_date;
+            """;
+
     private final JdbcTemplate jdbcTemplate;
 
     @Override
     public Integer save(Trip entity) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        var sql = """
-                   INSERT INTO trip (user_id, vehicle_id, distance, from_date, to_date)
-                   VALUES (?, ?, ?, ?, ?)
-                """;
+
+
         jdbcTemplate.update(
                 connection -> {
                     PreparedStatement ps = connection.prepareStatement(
-                            sql,
+                            SAVE_SQL,
                             Statement.RETURN_GENERATED_KEYS
                     );
                     ps.setInt(1, entity.getUserId());
@@ -69,28 +86,17 @@ public class TripDao implements Dao<Integer, Trip> {
     }
 
     public List<Trip> findByVehicleIdAndDateBetween(Integer vehicleId, LocalDate fromDate, LocalDate toDate) {
-        String sql = """
-                SELECT id, user_id, vehicle_id, distance, from_date, to_date
-                FROM trip
-                WHERE vehicle_id = ?
-                      AND ? BETWEEN from_date AND to_date
-                      OR ? BETWEEN from_date AND to_date;
-                """;
         var rowMapper = getRowMapper();
-        return jdbcTemplate.query(sql, rowMapper,
+        return jdbcTemplate.query(FIND_BY_VEHICLE_AND_DATE_BETWEEN_SQL, rowMapper,
                 vehicleId,
                 fromDate,
                 toDate);
     }
 
     public List<Trip> getAllByFilter(TripFilter tripFilter, Integer userId) {
-        String sql = """
-                SELECT id, user_id, vehicle_id, distance, from_date, to_date
-                FROM trip
-                WHERE user_id = ? AND vehicle_id = ? AND ? < from_date AND ? > to_date;
-                """;
         var rowMapper = getRowMapper();
-        return jdbcTemplate.query(sql, rowMapper,
+        return jdbcTemplate.query(
+                FIND_BY_USER_VEHICLE_AND_DATE_BETWEEN_SQL, rowMapper,
                 userId,
                 tripFilter.getVehicleId(),
                 tripFilter.getFromDate(),
