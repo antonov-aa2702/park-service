@@ -1,8 +1,9 @@
 package ru.relex.park.dao;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,12 @@ import java.util.Optional;
 @Component
 public class VehicleDao implements Dao<Integer, Vehicle> {
 
+    private static final String SAVE_SQL = "INSERT INTO vehicle (name, year) VALUES (?, ?)";
+    public static final String FIND_BY_ID_SQL = """
+                SELECT id, name, year
+                FROM vehicle
+                WHERE id = ?
+            """;
     private final JdbcTemplate jdbcTemplate;
 
     @Override
@@ -26,7 +33,7 @@ public class VehicleDao implements Dao<Integer, Vehicle> {
         jdbcTemplate.update(
                 connection -> {
                     PreparedStatement ps = connection.prepareStatement(
-                            "INSERT INTO vehicle (name, year) VALUES (?, ?)",
+                            SAVE_SQL,
                             Statement.RETURN_GENERATED_KEYS
                     );
                     ps.setString(1, entity.getName());
@@ -41,14 +48,14 @@ public class VehicleDao implements Dao<Integer, Vehicle> {
 
     @Override
     public Optional<Vehicle> findById(Integer id) {
-        String sql = """
-                SELECT * 
-                FROM vehicle
-                WHERE id = ?;                             
-                """;
-        var rowMapper = getVehicleRowMapper();
-        Vehicle vehicle = jdbcTemplate.queryForObject(sql, rowMapper, id);
-        return Optional.ofNullable(vehicle);
+        try {
+            return Optional.ofNullable(jdbcTemplate.queryForObject(
+                    FIND_BY_ID_SQL,
+                    new BeanPropertyRowMapper<>(Vehicle.class),
+                    id));
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
@@ -64,14 +71,6 @@ public class VehicleDao implements Dao<Integer, Vehicle> {
     @Override
     public boolean delete(Integer id) {
         return false;
-    }
-
-    private static RowMapper<Vehicle> getVehicleRowMapper() {
-        return (rs, rowNum) -> Vehicle.builder()
-                .id(rs.getInt("id"))
-                .name(rs.getString("name"))
-                .year(rs.getInt("year"))
-                .build();
     }
 
     private static int getGeneratedValue(KeyHolder keyHolder) {
