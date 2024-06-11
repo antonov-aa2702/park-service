@@ -1,10 +1,12 @@
 package ru.relex.park.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.relex.park.dto.VehicleDto;
 import ru.relex.park.service.VehicleService;
@@ -23,8 +25,8 @@ public class VehicleController {
      * @return идентификатор созданного транспортного средства
      */
     @PostMapping
-    public Integer createVehicle(@Validated
-                                 @RequestBody VehicleDto vehicleDto) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public Integer createVehicle(@Validated @RequestBody VehicleDto vehicleDto) {
         return vehicleService.createVehicle(vehicleDto);
     }
 }
